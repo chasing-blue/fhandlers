@@ -1,0 +1,39 @@
+import sys
+import re
+from __future__ import with_statement
+from random import *
+
+expr = None
+
+## pick a new name
+newname = "new" + str(randint(1,100)) + ".txt"
+
+## open the dump.txt
+fd = open("dump.txt","w")
+ft = open(newname, "w")
+
+## get the target file
+fn = input('Enter file name: ')
+
+## get the regex
+expr = input("Input the regex: ")
+if expr is None:
+    expr = ".*"
+
+try:
+    with open(fn) as f :
+        for ln in f:
+            ln = ln.rstrip()
+            if not re.search(expr, ln):
+                ft.write(ln+"\n")
+            else:
+                fd.write(ln+"\n")
+        fd.close()
+        ft.close()
+        print("discarded lines are in dump.txt")
+        print(f"updated file is {newname}. Please check the content")
+except EnvironmentError: # parent of IOError, OSError *and* WindowsError where available
+    print ("No such file")
+    fd.close()
+    ft.close()
+    exit()
